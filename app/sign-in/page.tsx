@@ -51,7 +51,7 @@ function FloatingInput({ id, type, label, value, onChange, autoComplete, icon }:
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         required
-        className="w-full rounded-md border border-border bg-background pl-9 pr-3 pt-5 pb-1.5 text-sm outline-none ring-0 focus:border-primary"
+        className="w-full rounded-md border border-border bg-background pl-9 pr-3 pt-5 pb-1.5 text-sm outline-none ring-0 focus:border-primary-foreground"
       />
     </div>
   )
@@ -93,9 +93,21 @@ export default function SignInPage() {
     }
   }
 
-  return (
-    <main className="min-h-screen bg-background flex items-center justify-center p-6">
-      <section className="w-full max-w-md rounded-2xl bg-card border shadow-card p-8 space-y-6">
+ return (
+    <main className="min-h-screen relative flex items-center justify-center p-6">
+      {/* Background Image */}
+      <Image
+        src={Background}
+        alt="Background"
+        fill
+        className="object-cover"
+        priority
+      />
+
+      {/* Overlay (optional, helps card stand out) */}
+      <div className="absolute inset-0 bg-primary-foreground/40" />
+
+      <section className="relative z-10 w-full max-w-md rounded-2xl bg-card border shadow-card p-8 space-y-6">
         <header className="space-y-1 text-center">
           <h1 className="text-2xl font-bold text-primary">SIGN IN</h1>
         </header>
