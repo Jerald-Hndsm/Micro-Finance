@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Image from "next/image"
 import Background from "@/assets/images/Barakah.jpg"
+import AnimatedButton from "@/components/ui/animated-button"
 
 import userIcon from "@/assets/svg/username.svg"
 import lockIcon from "@/assets/svg/password.svg"
@@ -32,11 +33,10 @@ function FloatingInput({ id, type, label, value, onChange, autoComplete, icon }:
       {/* Floating Label */}
       <label
         htmlFor={id}
-        className={`absolute left-9 transition-all duration-200 pointer-events-none z-10 ${
-          isFloated
-            ? "top-1.5 text-[10px] text-primary"
-            : "top-1/2 -translate-y-1/2 text-sm text-muted-foreground"
-        }`}
+        className={`absolute left-9 transition-all duration-200 pointer-events-none z-10 ${isFloated
+          ? "top-1.5 text-[10px] text-primary"
+          : "top-1/2 -translate-y-1/2 text-sm text-muted-foreground"
+          }`}
       >
         {label}
       </label>
@@ -93,7 +93,7 @@ export default function SignInPage() {
     }
   }
 
- return (
+  return (
     <main className="min-h-screen relative flex items-center justify-center p-6">
       {/* Background Image */}
       <Image
@@ -135,13 +135,13 @@ export default function SignInPage() {
 
           {errorMessage ? <p className="text-sm text-red-600">{errorMessage}</p> : null}
 
-          <button
+          <AnimatedButton
             type="submit"
             disabled={isSubmitting}
-            className="w-full rounded-lrg bg-primary-foreground px-3 py-2 text-sm font-medium text-secondary hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full"
           >
             {isSubmitting ? "Signing in..." : "Sign in"}
-          </button>
+          </AnimatedButton>
         </form>
       </section>
     </main>
