@@ -8,22 +8,22 @@ import { cn } from "@/lib/utils"
 const menuItems = [
   {
     name: "Dashboard",
-    href: "/",
+    href: "/dashboard",
     icon: LayoutDashboard,
   },
   {
     name: "Savings",
-    href: "/savings",
+    href: "/dashboard/savings",
     icon: PiggyBank,
   },
   {
     name: "Loan Applications",
-    href: "/loan-applications",
+    href: "/dashboard/loan-applications",
     icon: FileText,
   },
   {
     name: "Payments",
-    href: "/payments",
+    href: "/dashboard/payments",
     icon: CreditCard,
   },
 ]
