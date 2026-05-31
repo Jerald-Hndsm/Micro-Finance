@@ -1,28 +1,39 @@
 import { NextResponse } from "next/server"
-import { AUTH_COOKIE_NAME } from "@/lib/auth"
+import { initializeApp, getApps, cert } from "firebase-admin/app"
+import { getAuth } from "firebase-admin/auth"
 
-type LoginBody = {
-  email?: string
-  password?: string
+if (!getApps().length) {
+  initializeApp({
+    credential: cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+    }),
+  })
 }
 
 export async function POST(request: Request) {
-  const body = (await request.json().catch(() => null)) as LoginBody | null
-  const email = body?.email?.trim()
-  const password = body?.password?.trim()
+  const body = await request.json().catch(() => null)
+  const idToken = body?.idToken
 
-  if (!email || !password) {
-    return NextResponse.json({ message: "Email and password are required." }, { status: 400 })
+  if (!idToken) {
+    return NextResponse.json({ message: "Missing token." }, { status: 400 })
   }
 
-  const response = NextResponse.json({ ok: true })
-  response.cookies.set(AUTH_COOKIE_NAME, "authenticated", {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 60 * 60 * 8,
-  })
+  try {
+    const expiresIn = 60 * 60 * 24 * 5 * 1000 // 5 days
+    const sessionCookie = await getAuth().createSessionCookie(idToken, { expiresIn })
 
-  return response
+    const response = NextResponse.json({ ok: true })
+    response.cookies.set("session", sessionCookie, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: expiresIn / 1000,
+    })
+    return response
+  } catch {
+    return NextResponse.json({ message: "Invalid token." }, { status: 401 })
+  }
 }

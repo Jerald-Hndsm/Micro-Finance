@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Image from "next/image"
 import Background from "@/assets/images/Barakah.jpg"
 import AnimatedButton from "@/components/ui/animated-button"
+import { signInWithEmailAndPassword } from "firebase/auth"
+import { auth } from "@/lib/firebase"
 
 import userIcon from "@/assets/svg/username.svg"
 import lockIcon from "@/assets/svg/password.svg"
@@ -97,10 +99,15 @@ export default function SignInPage() {
     setErrorMessage("")
 
     try {
+      // 1. Sign in with Firebase client-side
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      const idToken = await userCredential.user.getIdToken()
+
+      // 2. Send idToken to API to create session cookie
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ idToken }),
       })
 
       if (!response.ok) {
@@ -112,8 +119,17 @@ export default function SignInPage() {
       const nextPath = searchParams.get("next") || "/dashboard"
       router.replace(nextPath)
       router.refresh()
-    } catch {
-      setErrorMessage("Something went wrong. Please try again.")
+    } catch (err: unknown) {
+      const code = (err as { code?: string }).code
+      if (code === "auth/invalid-credential" || code === "auth/wrong-password") {
+        setErrorMessage("Incorrect email or password.")
+      } else if (code === "auth/user-not-found") {
+        setErrorMessage("No account found with this email.")
+      } else if (code === "auth/too-many-requests") {
+        setErrorMessage("Too many attempts. Try again later.")
+      } else {
+        setErrorMessage("Something went wrong. Please try again.")
+      }
     } finally {
       setIsSubmitting(false)
     }

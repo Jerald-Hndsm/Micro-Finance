@@ -43,7 +43,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
       className={cn(
         "group inline-flex items-center justify-center px-6 py-0.5 rounded-lrg relative overflow-hidden bg-primary-foreground dark:bg-primary border border-neutral-200 dark:border-neutral-800",
         "font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50",
-        "[--shine:rgba(0,0,0,.66)] dark:[--shine:rgba(255,255,255,.66)]",
+        "[--shine:#16a34a] dark:[--shine:#22c55e]",
         className,
       )}
     >

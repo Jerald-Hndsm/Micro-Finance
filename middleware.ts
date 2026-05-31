@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { AUTH_COOKIE_NAME } from "@/lib/auth"
 
 const PUBLIC_PATHS = ["/sign-in"]
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl
   const isPublicPath = PUBLIC_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`))
   const isAuthApiPath = pathname.startsWith("/api/auth/")
-  const hasSession = Boolean(request.cookies.get(AUTH_COOKIE_NAME)?.value)
+
+  const session = request.cookies.get("session")?.value
+  const hasSession = Boolean(session)
 
   if (!hasSession && !isPublicPath && !isAuthApiPath) {
     const signInUrl = request.nextUrl.clone()
