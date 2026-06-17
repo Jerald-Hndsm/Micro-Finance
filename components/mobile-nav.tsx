@@ -4,14 +4,15 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
-import { LayoutDashboard, PiggyBank, FileText, CreditCard, Menu, X, LogOut } from "lucide-react"
+import { LayoutDashboard, PiggyBank, FileText, CreditCard, Menu, X, LogOut, User } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const menuItems = [
-  { name: "Dashboard", href: "/", icon: LayoutDashboard },
-  { name: "Savings", href: "/savings", icon: PiggyBank },
-  { name: "Loan Applications", href: "/loan-applications", icon: FileText },
-  { name: "Payments", href: "/payments", icon: CreditCard },
+  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Members", href: "/dashboard/members", icon: User },
+  { name: "Savings", href: "/dashboard/savings", icon: PiggyBank },
+  { name: "Loans", href: "/dashboard/loans", icon: FileText },
+  { name: "Payments", href: "/dashboard/payments", icon: CreditCard },
 ]
 
 export default function MobileNav() {
