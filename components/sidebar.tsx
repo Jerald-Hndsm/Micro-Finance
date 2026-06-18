@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LayoutDashboard, PiggyBank, FileText, CreditCard, LogOut, User } from "lucide-react"
+import { LayoutDashboard, PiggyBank, FileText, CreditCard, LogOut, Users } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const menuItems = [
@@ -14,7 +14,7 @@ const menuItems = [
   {
     name: "Members",
     href: "/dashboard/members",
-    icon: User,
+    icon: Users,
   },
   {
     name: "Savings",
